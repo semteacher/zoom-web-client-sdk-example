@@ -24,7 +24,7 @@ function websdkready() {
 				signatureEndpoint: 'get-zoom-signature.php',
 				userName: document.getElementById('userName').value,
 				userEmail: document.getElementById('userEmail').value,
-				role: document.getElementById('meetingRole').value // 1 for host; 0 for attendee
+                role: 0 // 1 for host; 0 for attendee
 			};
 
             if (!meetConfig.meetingNumber || !meetConfig.meetingPwd || !meetConfig.userName) {

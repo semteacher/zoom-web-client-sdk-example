@@ -15,46 +15,37 @@ function websdkready() {
 			e.preventDefault();
 
 			const meetConfig = {
-				apiKey: 'my-api-key-here',
 				signatureEndpoint: 'get-zoom-signature.php',
-				meetingNumber: document.getElementById('meetingNumber').value.replace(/ /g, ''),
-				leaveUrl: 'url-goes-here',
 				userName: document.getElementById('userName').value,
 				userEmail: document.getElementById('userEmail').value,
-				passWord: document.getElementById('meetingPassword').value,
 				role: document.getElementById('meetingRole').value // 1 for host; 0 for attendee
 			};
-
-			//console.log({meetConfig});
-
-			if (!meetConfig.meetingNumber || !meetConfig.userName) {
-				alert("Meeting number or username is empty");
-				return false;
-			}
 
 			fetch( meetConfig.signatureEndpoint, {
 				method: 'POST',
 				body: JSON.stringify({ meetingData: meetConfig })
 			})		 
-			.then(result => result.text())
-			.then(response => {
-				
+			.then(response => response.json())
+			.then(data => {
+                //console.log(data.meetingData);
+                if (!data.meetingData.userName) {
+                	alert("Username is empty");
+                	return false;
+                }
 				ZoomMtg.init({
-					leaveUrl: meetConfig.leaveUrl,
+					leaveUrl: data.meetingData.leaveUrl,
 					isSupportAV: true,
 					success: function (res) {
 						ZoomMtg.join({
-								signature: response,
-								meetingNumber: meetConfig.meetingNumber,
-								userName: meetConfig.userName,
-								apiKey: meetConfig.apiKey,
-								//userEmail: 'user@gmail.com',
-								passWord: meetConfig.passWord,
+								signature: data.meetingData.signature,
+								meetingNumber: data.meetingData.meetingNumber,
+								userName: data.meetingData.userName,
+								apiKey: data.meetingData.apiKey,
+								userEmail: data.meetingData.userEmail,
+								passWord: data.meetingData.meetingPwd,
 								success: function(res){
 									console.log('join meeting success');
-									document.getElementById('nav-tool').style.display = 'none';									
-									//var joinUrl = "meeting.html?" + testTool.serialize(meetConfig);
-									//window.open(joinUrl, "_blank");
+									document.getElementById('nav-tool').style.display = 'none';
 								},
 								error: function(res) {
 									console.log(res);

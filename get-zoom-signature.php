@@ -1,17 +1,29 @@
 <?php
 
 // fill in your API Secret (probably from the JWT, not the SDK!)
-$apiSecret 		= 'my-api-secret-here';
+$apiKey         = 'DSj0kSohSHKkqjkbVpfEtw'; 
+$apiSecret 		= 'zmFxo5ShNIhFxHh5zcVEREj9Mtc4AeBmb1Iw';
+$meetingNumber  = '96881738675';
+$meetingPwd     = '1d7zNq';
+$leaveUrl       = 'index.html';
 
 // if you're passing in a JSON object, decode it first
 $meetingData 	= json_decode(file_get_contents('php://input'), true);
 
 // Make sure your variable names match; ex. "mn" and not "meetingNumber"
-$apiKey 		= isset( $meetingData['meetingData']['apiKey'] ) 		? $meetingData['meetingData']['apiKey'] 		: '';
-$meetingNumber 	= isset( $meetingData['meetingData']['meetingNumber'] ) ? $meetingData['meetingData']['meetingNumber'] 	: '';
-$role 			= isset( $meetingData['meetingData']['role'] ) 			? $meetingData['meetingData']['role'] 			: '';
+//$apiKey 		= isset( $meetingData['meetingData']['apiKey'] ) 		? $meetingData['meetingData']['apiKey'] 		: '';
+//$meetingNumber 	= isset( $meetingData['meetingData']['meetingNumber'] ) ? $meetingData['meetingData']['meetingNumber'] 	: '';
+$userName 		= isset( $meetingData['meetingData']['userName'] ) ? $meetingData['meetingData']['userName'] : '';
+$userEmail 	    = isset( $meetingData['meetingData']['userEmail'] ) ? $meetingData['meetingData']['userEmail'] : '';
+$role 			= isset( $meetingData['meetingData']['role'] ) ? $meetingData['meetingData']['role'] : '';
+$meetingData['meetingData']['apiKey'] = $apiKey;
+$meetingData['meetingData']['meetingNumber'] = $meetingNumber;
+$meetingData['meetingData']['meetingPwd'] = $meetingPwd;
+$meetingData['meetingData']['leaveUrl'] = $leaveUrl;
+$meetingData['meetingData']['signature'] = generate_signature( $apiKey, $apiSecret, $meetingNumber, $role);
 
-print generate_signature( $apiKey, $apiSecret, $meetingNumber, $role);
+//print generate_signature( $apiKey, $apiSecret, $meetingNumber, $role);
+print json_encode($meetingData);
 
 // this function is right from the Zoom documentation
 // https://marketplace.zoom.us/docs/sdk/native-sdks/web/build/signature

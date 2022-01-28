@@ -8,6 +8,9 @@ function websdkready() {
 	ZoomMtg.preLoadWasm();
   	ZoomMtg.prepareJssdk();
 
+    //const params=Object.fromEntries(new URLSearchParams(document.location.search));
+    const urlParams = new URLSearchParams(document.location.search);
+
 	// click join meeting button
 	document
 		.getElementById("join_meeting")
@@ -15,11 +18,19 @@ function websdkready() {
 			e.preventDefault();
 
 			const meetConfig = {
+                meetingNumber: urlParams.get('id'),
+                meetingPwd: urlParams.get('pwd'),
+                leaveUrl: document.location.href,
 				signatureEndpoint: 'get-zoom-signature.php',
 				userName: document.getElementById('userName').value,
 				userEmail: document.getElementById('userEmail').value,
 				role: document.getElementById('meetingRole').value // 1 for host; 0 for attendee
 			};
+
+            if (!meetConfig.meetingNumber || !meetConfig.meetingPwd || !meetConfig.userName) {
+              	alert("No MeetingID or password or username is empty!");
+               	return false;
+            }
 
 			fetch( meetConfig.signatureEndpoint, {
 				method: 'POST',
@@ -27,11 +38,7 @@ function websdkready() {
 			})		 
 			.then(response => response.json())
 			.then(data => {
-                //console.log(data.meetingData);
-                if (!data.meetingData.userName) {
-                	alert("Username is empty");
-                	return false;
-                }
+
 				ZoomMtg.init({
 					leaveUrl: data.meetingData.leaveUrl,
 					isSupportAV: true,

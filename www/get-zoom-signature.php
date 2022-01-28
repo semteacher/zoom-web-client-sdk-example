@@ -1,12 +1,5 @@
 <?php
-
-// fill in your API Secret (probably from the JWT, not the SDK!)
-//$apiKey         = 'DSj0kSohSHKkqjkbVpfEtw'; 
-//$apiSecret 		= 'zmFxo5ShNIhFxHh5zcVEREj9Mtc4AeBmb1Iw';
-//$meetingNumber  = '96881738675';
-//$meetingPwd     = '1d7zNq';
-//$leaveUrl       = 'index.html';
-
+//laod API keys (only)
 require_once(dirname(__FILE__, 2) . DIRECTORY_SEPARATOR .'keys.php');
 
 // if you're passing in a JSON object, decode it first
@@ -19,10 +12,11 @@ $userName 		= isset( $meetingData['meetingData']['userName'] ) ? $meetingData['m
 $userEmail 	    = isset( $meetingData['meetingData']['userEmail'] ) ? $meetingData['meetingData']['userEmail'] : '';
 $role 			= isset( $meetingData['meetingData']['role'] ) ? $meetingData['meetingData']['role'] : '';
 $meetingData['meetingData']['apiKey'] = $apiKey;
-$meetingData['meetingData']['meetingNumber'] = $meetingNumber;
-$meetingData['meetingData']['meetingPwd'] = $meetingPwd;
-$meetingData['meetingData']['leaveUrl'] = $leaveUrl;
-$meetingData['meetingData']['signature'] = generate_signature( $apiKey, $apiSecret, $meetingNumber, $role);
+//$meetingData['meetingData']['meetingNumber'] = $meetingNumber;
+//$meetingData['meetingData']['meetingPwd'] = $meetingPwd;
+//$meetingData['meetingData']['leaveUrl'] = $leaveUrl;
+//$meetingData['meetingData']['signature'] = generate_signature( $apiKey, $apiSecret, $meetingNumber, $role);
+$meetingData['meetingData']['signature'] = generate_signature( $apiKey, $apiSecret, $meetingData['meetingData']['meetingNumber'], $role);
 
 //print generate_signature( $apiKey, $apiSecret, $meetingNumber, $role);
 print json_encode($meetingData);

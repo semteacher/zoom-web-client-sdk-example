@@ -6,19 +6,12 @@ require_once(dirname(__FILE__, 2) . DIRECTORY_SEPARATOR .'keys.php');
 $meetingData 	= json_decode(file_get_contents('php://input'), true);
 
 // Make sure your variable names match; ex. "mn" and not "meetingNumber"
-//$apiKey 		= isset( $meetingData['meetingData']['apiKey'] ) 		? $meetingData['meetingData']['apiKey'] 		: '';
-//$meetingNumber 	= isset( $meetingData['meetingData']['meetingNumber'] ) ? $meetingData['meetingData']['meetingNumber'] 	: '';
 $userName 		= isset( $meetingData['meetingData']['userName'] ) ? $meetingData['meetingData']['userName'] : '';
 $userEmail 	    = isset( $meetingData['meetingData']['userEmail'] ) ? $meetingData['meetingData']['userEmail'] : '';
 $role 			= isset( $meetingData['meetingData']['role'] ) ? $meetingData['meetingData']['role'] : '';
 $meetingData['meetingData']['apiKey'] = $apiKey;
-//$meetingData['meetingData']['meetingNumber'] = $meetingNumber;
-//$meetingData['meetingData']['meetingPwd'] = $meetingPwd;
-//$meetingData['meetingData']['leaveUrl'] = $leaveUrl;
-//$meetingData['meetingData']['signature'] = generate_signature( $apiKey, $apiSecret, $meetingNumber, $role);
 $meetingData['meetingData']['signature'] = generate_signature( $apiKey, $apiSecret, $meetingData['meetingData']['meetingNumber'], $role);
 
-//print generate_signature( $apiKey, $apiSecret, $meetingNumber, $role);
 print json_encode($meetingData);
 
 // this function is right from the Zoom documentation

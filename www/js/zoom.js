@@ -27,8 +27,8 @@ function websdkready() {
                 role: 0 // 1 for host; 0 for attendee
 			};
 
-            if (!meetConfig.meetingNumber || !meetConfig.meetingPwd || !meetConfig.userName) {
-              	alert("No MeetingID or password or username is empty!");
+            if (!meetConfig.meetingNumber || !meetConfig.meetingPwd) {
+              	alert("No MeetingID or password in URL provided!");
                	return false;
             }
 
@@ -39,6 +39,10 @@ function websdkready() {
 			.then(response => response.json())
 			.then(data => {
 
+                if (!data.meetingData.userName) {
+                    alert("No username - you are not authorized in Moodle!");
+                    return false;
+                }
 				ZoomMtg.init({
 					leaveUrl: data.meetingData.leaveUrl,
 					isSupportAV: true,

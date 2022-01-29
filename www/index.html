@@ -16,24 +16,21 @@
     <nav id="nav-tool" class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">Skillman's Zoom Home</a>
+                <a class="navbar-brand" href="#">Skillman's Meeting Home</a>
             </div>
             <div id="navbar" class="websdktest">
                 <form class="navbar-form navbar-right" id="meeting_form">
-                    <div class="form-group">
-                        <input type="text" name="userName" id="userName" value="" maxLength="100"
+                    <input type="hidden" name="userName" id="userName" value="" maxLength="100"
                             placeholder="Name (required!)" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" name="userEmail" id="userEmail" value="" style="width:150px"
+
+                    <input type="hidden" name="userEmail" id="userEmail" value="" style="width:150px"
                             maxLength="32" placeholder="Email (optional)" class="form-control">
-                    </div>
                     
                     <input type="hidden" id="meeting_lang" value="en-US" />
                     <input type="hidden" id="meeting_china" value="0" /> <!-- Global-->
                     
                     <input type="hidden" value="" id="copy_link_value" />
-                    <button type="submit" class="btn btn-primary" id="join_meeting">Join</button>
+                    <button type="submit" class="btn btn-primary" id="join_meeting">Join meeting</button>
                     
                 </form>
             </div>

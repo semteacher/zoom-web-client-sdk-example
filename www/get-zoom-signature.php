@@ -1,14 +1,16 @@
 <?php
 //laod API keys (only)
 require_once(dirname(__FILE__, 2) . DIRECTORY_SEPARATOR .'keys.php');
+//get into moodle // dirty and unsafe!
+require_once(dirname(__FILE__, 3) . DIRECTORY_SEPARATOR .'config.php');
 
 // if you're passing in a JSON object, decode it first
 $meetingData 	= json_decode(file_get_contents('php://input'), true);
 
 // Make sure your variable names match; ex. "mn" and not "meetingNumber"
-$userName 		= isset( $meetingData['meetingData']['userName'] ) ? $meetingData['meetingData']['userName'] : '';
-$userEmail 	    = isset( $meetingData['meetingData']['userEmail'] ) ? $meetingData['meetingData']['userEmail'] : '';
-$role 			= isset( $meetingData['meetingData']['role'] ) ? $meetingData['meetingData']['role'] : '';
+$meetingData['meetingData']['userName'] = trim($USER->firstname.' '.$USER->lastname);
+$meetingData['meetingData']['userEmail'] = $USER->email;
+$role = isset( $meetingData['meetingData']['role'] ) ? $meetingData['meetingData']['role'] : '0';//attendee forced
 $meetingData['meetingData']['apiKey'] = $apiKey;
 $meetingData['meetingData']['signature'] = generate_signature( $apiKey, $apiSecret, $meetingData['meetingData']['meetingNumber'], $role);
 

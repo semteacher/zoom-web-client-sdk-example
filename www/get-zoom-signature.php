@@ -11,28 +11,40 @@ $meetingData 	= json_decode(file_get_contents('php://input'), true);
 $meetingData['meetingData']['userName'] = trim($USER->firstname.' '.$USER->lastname);
 $meetingData['meetingData']['userEmail'] = $USER->email;
 $role = isset( $meetingData['meetingData']['role'] ) ? $meetingData['meetingData']['role'] : '0';//attendee forced
-$meetingData['meetingData']['apiKey'] = $apiKey;
-$meetingData['meetingData']['signature'] = generate_signature( $apiKey, $apiSecret, $meetingData['meetingData']['meetingNumber'], $role);
+$meetingData['meetingData']['sdkKey'] = $sdkKey;
+$meetingData['meetingData']['signature'] = generate_signature( $sdkKey, $sdkSecret, $meetingData['meetingData']['meetingNumber'], $role);
 
 print json_encode($meetingData);
 
 // this function is right from the Zoom documentation
-// https://marketplace.zoom.us/docs/sdk/native-sdks/web/build/signature
-function generate_signature ( $api_key, $api_secret, $meeting_number, $role){
+//https://marketplace.zoom.us/docs/sdk/native-sdks/auth/#generate-the-sdk-jwt
+function generate_signature ( $sdkKey, $sdkSecret, $meeting_number, $role){
 
-  //Set the timezone to UTC
-  date_default_timezone_set("UTC");
+    //Set the timezone to UTC
+    $time = time();
+    $texp = $time + 60 * 60 * 2;
+	
+    // 2022
+    $header = (object) array('alg' => 'HS256', 'typ' => 'JWT');
+    $payload = (object) array(
+        'sdkKey' => $sdkKey,
+        'mn' => $meeting_number,
+        'role' => $role,
+        'iat' => $time,
+        'exp' => $texp,
+        'appKey' => $sdkKey,
+        'tokenExp' => $texp
+    );
 
-	$time = time() * 1000 - 30000;//time in milliseconds (or close enough)
-	
-	$data = base64_encode($api_key . $meeting_number . $time . $role);
-	
-	$hash = hash_hmac('sha256', $data, $api_secret, true);
-	
-	$_sig = $api_key . "." . $meeting_number . "." . $time . "." . $role . "." . base64_encode($hash);
-	
-	//return signature, url safe base64 encoded
-	return rtrim(strtr(base64_encode($_sig), '+/', '-_'), '=');
+    $base64UrlHeader = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode(json_encode($header)));
+    $base64UrlPayload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode(json_encode($payload)));
+
+    $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, $sdkSecret, true);
+    $base64UrlSignature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
+
+    $jwt = $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
+
+    return $jwt;
 }
 
 ?>

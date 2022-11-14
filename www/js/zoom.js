@@ -43,15 +43,18 @@ function websdkready() {
                     alert("No username - you are not authorized in Moodle!");
                     return false;
                 }
+                //console.log('meetingData');
+                //console.log(data.meetingData);
 				ZoomMtg.init({
 					leaveUrl: data.meetingData.leaveUrl,
 					isSupportAV: true,
 					success: function (res) {
 						ZoomMtg.join({
+                                //debug: true,
 								signature: data.meetingData.signature,
 								meetingNumber: data.meetingData.meetingNumber,
 								userName: data.meetingData.userName,
-								apiKey: data.meetingData.apiKey,
+								sdkKey: data.meetingData.sdkKey,
 								userEmail: data.meetingData.userEmail,
 								passWord: data.meetingData.meetingPwd,
 								success: function(res){

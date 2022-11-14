@@ -2,7 +2,10 @@
 //laod API keys (only)
 require_once(dirname(__FILE__, 2) . DIRECTORY_SEPARATOR .'keys.php');
 //get into moodle // dirty and unsafe!
-require_once(dirname(__FILE__, 3) . DIRECTORY_SEPARATOR .'config.php');
+// local -dev
+//require_once(dirname(__FILE__, 3) . DIRECTORY_SEPARATOR .'config.php');
+// Skillman - prod
+require_once(dirname(__FILE__, 3) . DIRECTORY_SEPARATOR . 'moodle'  . DIRECTORY_SEPARATOR . 'config.php');
 
 // if you're passing in a JSON object, decode it first
 $meetingData 	= json_decode(file_get_contents('php://input'), true);

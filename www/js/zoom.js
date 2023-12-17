@@ -6,7 +6,7 @@ window.addEventListener('DOMContentLoaded', function(event) {
 function websdkready() {
 
 	ZoomMtg.preLoadWasm();
-  	ZoomMtg.prepareJssdk();
+  	ZoomMtg.prepareWebSDK();
 
     //const params=Object.fromEntries(new URLSearchParams(document.location.search));
     const urlParams = new URLSearchParams(document.location.search);
